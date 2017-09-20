@@ -100,10 +100,18 @@ public class MainActivity extends AppCompatActivity
                 /**
                  * 此处注意 是把 Teacher的主键ID 作为 student的外键 来用
                  */
-                student.setUniqueNum(teachers2.get(0).getId());
-                student.setAge((long) (15 + j));
-                DaoManager.getInstance().getDaoSession().getStudentDao().insert(student);
-                Toast.makeText(this, "插入第" + j + "个学生数据成功", Toast.LENGTH_SHORT).show();
+                if(teachers2!=null&&teachers2.size()>0)
+                {
+                    student.setUniqueNum(teachers2.get(0).getId());
+                    student.setAge((long) (15 + j));
+                    DaoManager.getInstance().getDaoSession().getStudentDao().insert(student);
+                    Toast.makeText(this, "插入第" + j + "个学生数据成功", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(this, "请先插入一条老师数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.button_delete_teacher:
                 MyLog.e("MainActivity-删除老师");
@@ -139,12 +147,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.button_check_teacher:
                 MyLog.e("MainActivity-查询老师数据");
                 List<Teacher> teachers1 = DaoManager.getInstance().getDaoSession().getTeacherDao().loadAll();
-                List<Student> studentListGf = teachers1.get(0).getStudentList();
-                MyLog.e("MainActivity-查询老师数据对应的学生数据-studentListGf:" + studentListGf);
+
                 teacherList.clear();
                 teacherList.addAll(teachers1);
                 if (teachers1 != null && teachers1.size() > 0)
                 {
+                    List<Student> studentListGf = teachers1.get(0).getStudentList();
+                    MyLog.e("MainActivity-查询老师数据对应的学生数据-studentListGf:" + studentListGf);
                     if (teacherArrayAdapter == null)
                     {
                         teacherArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teacherList);

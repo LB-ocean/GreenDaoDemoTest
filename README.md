@@ -90,5 +90,5 @@
 	        }
 	    }
 
-  后期 会增加 数据库更新等等常用的操作,一起进步;另外，还有一篇demo 也将发布,就是 MVP+rxjava2+retrofit2+lambda;希望大家多度关注;
+  还有一篇demo 也将发布,就是 MVP+rxjava2+retrofit2+lambda;希望大家多度关注;
 
