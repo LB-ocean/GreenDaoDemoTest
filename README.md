@@ -1,12 +1,41 @@
 # GreenDao3.2.2 一对多 关联
-    虽然简单,此处也是遇到了不少坑,出现集合老是为null的情况,希望大家少走弯路;
+   > 虽然简单,此处也是遇到了不少坑,出现集合老是为null的情况,希望大家少走弯路;
+   >一对多 测试步骤:
+     *1. 点击 **增加老师**按钮 一下,添加一位老师
+     *2. 点击 **增加学生**按钮 多次,添加多名学生
+     *3. 点击 **查询老师数据**按钮,可以显示当前老师 对应的所有学生
+
 ## 效果图
 
 
 ![Image](https://github.com/LB-ocean/GreenDaoDemoTest/blob/master/picture/p1.png)
 
+-----------------
+##  一对多 中注意事项:
+*  **多**的外键一定是和**一** 的 主键对应的,不然返回的集合为空,可以看GreenDao自动生成的代码
+>
+          @Generated(hash = 927304389)
+            public List<Student> getStudentList() {
+                if (studentList == null) {
+                    final DaoSession daoSession = this.daoSession;
+                    if (daoSession == null) {
+                        throw new DaoException("Entity is detached from DAO context");
+                    }
+                    StudentDao targetDao = daoSession.getStudentDao();
+                    List<Student> studentListNew = targetDao._queryTeacher_StudentList(id);
+                    synchronized (this) {
+                        if (studentList == null) {
+                            studentList = studentListNew;
+                        }
+                    }
+                }
+                return studentList;
+            }
+        可以看到里边的这句List<Student> studentListNew = targetDao._queryTeacher_StudentList(id);
+        **id**即为当前Teacher的主键，当然主键你也可以设置成其它的,反正要是主键即可;这里是坑;
+------
+*
 
----
 ## 数据库插入新表
 
 ##  效果图先上:
