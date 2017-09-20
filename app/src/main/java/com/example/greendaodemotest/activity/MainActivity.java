@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.greendaodemotest.R;
 import com.example.greendaodemotest.bean.Student;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity
     Button buttonCheckStudent;
     @BindView(R.id.listView)
     ListView listView;
-    private int j = 0;
+    private int i=0,j = 0;
     private List<Student> studentList;
     private List<Teacher> teacherList;
     private ArrayAdapter<Teacher> teacherArrayAdapter;
@@ -75,12 +76,14 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.button_add_teacher:
                 MyLog.e("MainActivity-添加老师");
+                i++;
                 Teacher teacher = new Teacher();
-                teacher.setName("王芳");
+                teacher.setName("王芳"+i+"号");
                 /**
                  * 通过单例 插入 老师
                  */
                 DaoManager.getInstance().getDaoSession().getTeacherDao().insert(teacher);
+                Toast.makeText(this,"插入一条老师数据成功",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_add_student:
                 MyLog.e("MainActivity-添加学生");
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity
                 student.setUniqueNum(teachers2.get(0).getId());
                 student.setAge((long) (15 + j));
                 DaoManager.getInstance().getDaoSession().getStudentDao().insert(student);
+                Toast.makeText(this,"插入第"+j+"个学生数据成功",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_delete_teacher:
                 MyLog.e("MainActivity-删除老师");
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity
                 if (teachers != null && teachers.size() > 0)
                 {
                     DaoManager.getInstance().getDaoSession().getTeacherDao().delete(teachers.get(0));
+                    Toast.makeText(this,"删除一条老师数据成功",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.button_delete_student:
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity
                 if (students != null && students.size() > 0)
                 {
                     DaoManager.getInstance().getDaoSession().getStudentDao().delete(students.get(0));
+                    Toast.makeText(this,"删除一条学生数据成功",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.button_update:
