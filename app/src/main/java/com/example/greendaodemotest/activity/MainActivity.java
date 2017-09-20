@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.greendaodemotest.R;
 import com.example.greendaodemotest.bean.Student;
 import com.example.greendaodemotest.bean.Teacher;
+import com.example.greendaodemotest.bean.TestTableOne;
 import com.example.greendaodemotest.util.DaoManager;
 import com.example.greendaodemotest.util.MyLog;
 
@@ -44,11 +45,16 @@ public class MainActivity extends AppCompatActivity
     Button buttonCheckStudent;
     @BindView(R.id.listView)
     ListView listView;
-    private int i=0,j = 0;
+    @BindView(R.id.button_new_table_insert)
+    Button buttonNewTableInsert;
+    @BindView(R.id.button_new_table_show)
+    Button buttonNewTableShow;
+    private int i = 0, j = 0;
     private List<Student> studentList;
     private List<Teacher> teacherList;
     private ArrayAdapter<Teacher> teacherArrayAdapter;
     private ArrayAdapter<Student> studentArrayAdapter;
+    private ArrayAdapter<TestTableOne> tableOneArrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -69,7 +75,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @OnClick({R.id.button_add_teacher, R.id.button_add_student, R.id.button_delete_teacher, R.id.button_delete_student, R.id.button_update,R.id.button_check_teacher, R.id.button_check_student})
+    @OnClick({R.id.button_add_teacher, R.id.button_add_student, R.id.button_delete_teacher, R.id.button_delete_student, R.id.button_update, R.id.button_check_teacher, R.id.button_check_student,R.id.button_new_table_insert,R.id.button_new_table_show})
     public void onViewClicked(View view)
     {
         switch (view.getId())
@@ -78,12 +84,12 @@ public class MainActivity extends AppCompatActivity
                 MyLog.e("MainActivity-添加老师");
                 i++;
                 Teacher teacher = new Teacher();
-                teacher.setName("王芳"+i+"号");
+                teacher.setName("王芳" + i + "号");
                 /**
                  * 通过单例 插入 老师
                  */
                 DaoManager.getInstance().getDaoSession().getTeacherDao().insert(teacher);
-                Toast.makeText(this,"插入一条老师数据成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "插入一条老师数据成功", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_add_student:
                 MyLog.e("MainActivity-添加学生");
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity
                 student.setUniqueNum(teachers2.get(0).getId());
                 student.setAge((long) (15 + j));
                 DaoManager.getInstance().getDaoSession().getStudentDao().insert(student);
-                Toast.makeText(this,"插入第"+j+"个学生数据成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "插入第" + j + "个学生数据成功", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_delete_teacher:
                 MyLog.e("MainActivity-删除老师");
@@ -105,7 +111,7 @@ public class MainActivity extends AppCompatActivity
                 if (teachers != null && teachers.size() > 0)
                 {
                     DaoManager.getInstance().getDaoSession().getTeacherDao().delete(teachers.get(0));
-                    Toast.makeText(this,"删除一条老师数据成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "删除一条老师数据成功", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.button_delete_student:
@@ -114,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                 if (students != null && students.size() > 0)
                 {
                     DaoManager.getInstance().getDaoSession().getStudentDao().delete(students.get(0));
-                    Toast.makeText(this,"删除一条学生数据成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "删除一条学生数据成功", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.button_update:
@@ -134,23 +140,21 @@ public class MainActivity extends AppCompatActivity
                 MyLog.e("MainActivity-查询老师数据");
                 List<Teacher> teachers1 = DaoManager.getInstance().getDaoSession().getTeacherDao().loadAll();
                 List<Student> studentListGf = teachers1.get(0).getStudentList();
-                MyLog.e("MainActivity-查询老师数据对应的学生数据-studentListGf:"+studentListGf);
+                MyLog.e("MainActivity-查询老师数据对应的学生数据-studentListGf:" + studentListGf);
                 teacherList.clear();
                 teacherList.addAll(teachers1);
-                if(teachers1!=null&&teachers1.size()>0)
+                if (teachers1 != null && teachers1.size() > 0)
                 {
-                    if(teacherArrayAdapter==null)
+                    if (teacherArrayAdapter == null)
                     {
-                        teacherArrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,teacherList);
+                        teacherArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, teacherList);
 
-                    }
-                    else
+                    } else
                     {
                         teacherArrayAdapter.notifyDataSetChanged();
                     }
                     listView.setAdapter(teacherArrayAdapter);
-                }
-                else
+                } else
                 {
                     MyLog.e("MainActivity-查询老师数据为空");
                 }
@@ -160,27 +164,53 @@ public class MainActivity extends AppCompatActivity
                 List<Student> students1 = DaoManager.getInstance().getDaoSession().getStudentDao().loadAll();
                 this.studentList.clear();
                 this.studentList.addAll(students1);
-                if(this.studentList !=null&& this.studentList.size()>0)
+                if (this.studentList != null && this.studentList.size() > 0)
                 {
-                    if(studentArrayAdapter==null)
+                    if (studentArrayAdapter == null)
                     {
-                        studentArrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, this.studentList);
+                        studentArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, this.studentList);
 
-                    }
-                    else
+                    } else
                     {
                         studentArrayAdapter.notifyDataSetChanged();
                     }
                     listView.setAdapter(studentArrayAdapter);
-                }
-                else
+                } else
                 {
                     MyLog.e("MainActivity-查询学生数据为空");
                 }
                 break;
+
+            case R.id.button_new_table_insert:
+                for (int k = 0; k < 5; k++)
+                {
+                    TestTableOne tableOne = new TestTableOne();
+                    tableOne.setTestTableOnename("男"+k+"号");
+                    DaoManager.getInstance().getDaoSession().getTestTableOneDao().insert(tableOne);
+                }
+                MyLog.e("MainActivity-添加新表数据");
+                Toast.makeText(this, "添加新表数据成功", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button_new_table_show:
+                MyLog.e("MainActivity-查询新表数据");
+                List<TestTableOne> testTableOnes = DaoManager.getInstance().getDaoSession().getTestTableOneDao().loadAll();
+                if(testTableOnes!=null)
+                {
+                    if(tableOneArrayAdapter==null)
+                    {
+                        tableOneArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, testTableOnes);
+                        listView.setAdapter(tableOneArrayAdapter);
+                    }
+                    else
+                    {
+                        tableOneArrayAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                break;
+
         }
     }
-
 
 
 }

@@ -66,10 +66,28 @@
             android:layout_height="wrap_content"
             android:text="查询学生数据"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll2">
+
+        <Button
+            android:id="@+id/button_new_table_insert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="插入新表数据"/>
+
+        <Button
+            android:id="@+id/button_new_table_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="显示新表数据"/>
+    </LinearLayout>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll2"
+        android:layout_below="@id/ll3"
         />
 </RelativeLayout>
